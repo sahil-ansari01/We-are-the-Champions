@@ -26,10 +26,11 @@ onValue(endorsementInDB, function(snapshot) {
 
     if(snapshot.exists()) {
         let endorsementsArray = Object.entries(snapshot.val())
+        let reverseEndorsementArray = endorsementsArray.reverse()
 
         clearEndorsementEl()
 
-        for (let i = 0; i < endorsementsArray.length; i++) {
+        for (let i = 0; i < reverseEndorsementArray.length; i++) {
             let currentEndorsement = endorsementsArray[i]
             let currentEndorsementID = endorsementsArray[0]
             let currentEndorsementValue = endorsementsArray[1]
