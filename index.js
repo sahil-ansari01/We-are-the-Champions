@@ -8,17 +8,25 @@ const appSettings = {
 const app = initializeApp(appSettings)
 const database = getDatabase(app)
 const endorsementInDB = ref(database, "endorsements")
+const fromInDB = ref(database, "fromValue")
+const toInDB = ref(database, "toValue")
 
 const inputFieldEl = document.getElementById("input-field")
+const fromEl = document.getElementById("from-el")
+const toEl = document.getElementById("to-el")
 const publishButtonEl = document.getElementById("publish-button")
 const endorsementEl = document.getElementById("endorsement-el")
 
 
 publishButtonEl.addEventListener("click", function() {
-    let inputValue = inputFieldEl.value;
-    
-    push(endorsementInDB, inputValue)
-    
+    let inputValue = inputFieldEl.value
+    let fromValue = fromEl.value
+    let toValue = toEl.value
+
+    push(endorsementInDB, inputValue, fromValue)
+    push(fromInDB, fromValue)
+    push(toInDB, toValue)
+
     clearInputFieldEl()
 })
 
@@ -47,6 +55,8 @@ function clearEndorsementEl() {
 
 function clearInputFieldEl() {
     inputFieldEl.value = ""
+    fromEl.value = ""
+    toEl.value = ""
 }
 
 function appendNewValueToEndorsementEl(endorsement) {
@@ -55,7 +65,7 @@ function appendNewValueToEndorsementEl(endorsement) {
 
     let newValue = document.createElement("li")
 
-    newValue.textContent = endorsementValue
+    newValue.textContent = endorsementValue 
 
     newValue.addEventListener("click", function() {
         let exactLocOfEndorsementInDB = ref(database, `endorsements/${endorsementID}`)

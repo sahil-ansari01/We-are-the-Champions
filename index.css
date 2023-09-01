@@ -44,6 +44,20 @@ textarea {
     resize: none;
 }
 
+input {
+    width: 155px;
+    height: 28px;
+    text-align: center;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #444059;
+    color: #8F8F8F;
+    font-family: 'Inter', sans-serif;
+    font-size: 17px;
+    border: none;
+    border-radius: 10px;
+}
+
 button {
     width: 380px;
     height: 60px;
