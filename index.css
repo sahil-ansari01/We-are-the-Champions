@@ -10,7 +10,7 @@ html, body {
 .container {
     width: 500px;
     margin: 0 auto;
-    padding: 50px 0 200px 0;
+    padding: 20px 0 50px 0;
     background-color: #1B1924;
     text-align: center;
 }
@@ -81,7 +81,15 @@ ul li {
     padding: 15px;
 }
 
-ul li:hover {
-    cursor: pointer;
+header {
+    margin: 0 auto;
+    width: 500px;
+    text-align: center;
+    background-color: #1B1924;
+}
 
+header .fa {
+    font-size: 30px;
+    padding: 20px;
+    color: #28A9F1;
 }
