@@ -23,11 +23,20 @@ publishButtonEl.addEventListener("click", function() {
     let fromValue = fromEl.value
     let toValue = toEl.value
 
-    push(endorsementInDB, inputValue, fromValue)
+    push(endorsementInDB, inputValue)
     push(fromInDB, fromValue)
     push(toInDB, toValue)
 
     clearInputFieldEl()
+})
+
+onValue(fromInDB, function(snapshot) {
+
+    let fromValueArray = Object.entries(snapshot.val())
+
+    for (let i = 0; i < fromValueArray.length; i++) {
+        let currentFromValue = fromValueArray[i]
+    }
 })
 
 onValue(endorsementInDB, function(snapshot) {
@@ -55,8 +64,6 @@ function clearEndorsementEl() {
 
 function clearInputFieldEl() {
     inputFieldEl.value = ""
-    fromEl.value = ""
-    toEl.value = ""
 }
 
 function appendNewValueToEndorsementEl(endorsement) {
