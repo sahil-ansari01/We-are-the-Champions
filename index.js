@@ -8,35 +8,18 @@ const appSettings = {
 const app = initializeApp(appSettings)
 const database = getDatabase(app)
 const endorsementInDB = ref(database, "endorsements")
-const fromInDB = ref(database, "fromValue")
-const toInDB = ref(database, "toValue")
 
 const inputFieldEl = document.getElementById("input-field")
-const fromEl = document.getElementById("from-el")
-const toEl = document.getElementById("to-el")
 const publishButtonEl = document.getElementById("publish-button")
 const endorsementEl = document.getElementById("endorsement-el")
 
 
 publishButtonEl.addEventListener("click", function() {
     let inputValue = inputFieldEl.value
-    let fromValue = fromEl.value
-    let toValue = toEl.value
 
     push(endorsementInDB, inputValue)
-    push(fromInDB, fromValue)
-    push(toInDB, toValue)
 
     clearInputFieldEl()
-})
-
-onValue(fromInDB, function(snapshot) {
-
-    let fromValueArray = Object.entries(snapshot.val())
-
-    for (let i = 0; i < fromValueArray.length; i++) {
-        let currentFromValue = fromValueArray[i]
-    }
 })
 
 onValue(endorsementInDB, function(snapshot) {
