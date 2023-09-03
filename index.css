@@ -33,7 +33,7 @@ img {
 textarea {
     width: 320px;
     height: 130px;
-    margin: 25px 0 10px 0; 
+    margin-top: 20px;
     padding: 15px;
     background-color: #444059;
     color: #8F8F8F;
@@ -54,7 +54,7 @@ textarea {
 
 input {
     margin: 0 auto;
-    margin-bottom: 20px;
+    margin: 10px 0 20px 0;
     width: 120px;
     height: 30px;
     text-align: center;
@@ -103,8 +103,8 @@ ul li {
     background-color: #fff;
     color: #1B1924;
     margin: 20px 0;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 10px;
 }
 
 .social {
