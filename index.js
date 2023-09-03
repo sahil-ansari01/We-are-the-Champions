@@ -58,11 +58,5 @@ function appendNewValueToEndorsementEl(endorsement) {
 
     newValue.textContent = endorsementValue 
 
-    newValue.addEventListener("click", function() {
-        let exactLocOfEndorsementInDB = ref(database, `endorsements/${endorsementID}`)
-        
-        remove(exactLocOfEndorsementInDB)
-    })
-
     endorsementEl.append(newValue)
 }
