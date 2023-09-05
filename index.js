@@ -71,7 +71,6 @@ onValue(endorsementInDB, function(snapshot) {
 function clearEndorsementEl() {
     endorsementEl.innerHTML = ""
 }
-
 function appendNewValueToEndorsementEl(review) {
     let reviewID = review[0];
     let reviewData = review[1];
@@ -113,22 +112,24 @@ function appendNewValueToEndorsementEl(review) {
 
     if (hasLiked === 'true') {
         // If the user has already liked the review, disable the like button
-        likesEl.disabled = true;
+        likesEl.classList.add('liked'); // Add a CSS class for liked button
     } else {
         // If the user hasn't liked the review, add a click event listener
         likesEl.addEventListener("click", function () {
-            reviewLikes += 1;
-            let exactLocationInDB = ref(database, `endorsements/${reviewID}`);
-            update(exactLocationInDB, {
-                3: reviewLikes,
-            });
-
-            // Update the button text and style
+            if (likesEl.classList.contains('liked')) {
+                // User is unliking the review
+                reviewLikes -= 1;
+                likesEl.classList.remove('liked');
+                localStorage.setItem(likeButtonID, 'false'); // Set as unliked
+            } else {
+                // User is liking the review
+                reviewLikes += 1;
+                likesEl.classList.add('liked');
+                localStorage.setItem(likeButtonID, 'true'); // Set as liked
+            }
+            
+            // Update the button text with the new like count
             likesEl.textContent = `💙 ${reviewLikes}`;
-            likesEl.disabled = true;
-
-            // Store that the user has liked this review in localStorage
-            localStorage.setItem(likeButtonID, 'true');
         });
     }
 
