@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
-import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
+import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
 const appSettings = {
     databaseURL: "https://we-are-the-champions-db-c108c-default-rtdb.asia-southeast1.firebasedatabase.app/"
@@ -10,35 +10,61 @@ const database = getDatabase(app)
 const endorsementInDB = ref(database, "endorsements")
 
 const inputFieldEl = document.getElementById("input-field")
+const fromEl = document.getElementById("from-el")
+const toEl = document.getElementById("to-el")
 const publishButtonEl = document.getElementById("publish-button")
 const endorsementEl = document.getElementById("endorsement-el")
 
 
 publishButtonEl.addEventListener("click", function() {
-    let inputValue = inputFieldEl.value
+    let reviewText = inputFieldEl.value
+    let fromData = fromEl.value
+    let toData = toEl.value
 
-    push(endorsementInDB, inputValue)
+    if (reviewText && fromData && toData) {
+        clearInputFieldEl()
+        pushData(reviewText, fromData, toData);
+        inputFieldEl.style.border = "none"
+        fromEl.style.border = "none"
+        toEl.style.border = "none"
+    } else {
+        clearInputFieldEl()
+        inputFieldEl.style.border = "2px solid red"
+        fromEl.style.border = "2px solid red"
+        toEl.style.border = "2px solid red"
+    }
 
-    clearInputFieldEl()
 })
 
+function clearInputFieldEl() {
+    inputFieldEl.value = ""
+    fromEl.value = ""
+    toEl.value = ""
+}
+
+function pushData(review, from, to) {
+    let arr = [review, from, to, 1];
+    push(endorsementInDB, arr)
+}
+
 onValue(endorsementInDB, function(snapshot) {
+    clearEndorsementEl()
 
     if(snapshot.exists()) {
-        let endorsementsArray = Object.entries(snapshot.val())
-        let reverseEndorsementArray = endorsementsArray.reverse()
+        let itemsArray = Object.entries(snapshot.val())
+        let reverseEndorsementArray = itemsArray.reverse()
 
         clearEndorsementEl()
 
         for (let i = 0; i < reverseEndorsementArray.length; i++) {
-            let currentEndorsement = endorsementsArray[i]
-            let currentEndorsementID = endorsementsArray[0]
-            let currentEndorsementValue = endorsementsArray[1]
+            let currentReview = itemsArray[i]
+            let currentEndorsementID = itemsArray[0]
+            let currentEndorsementValue = itemsArray[1]
 
-            appendNewValueToEndorsementEl(currentEndorsement)
+            appendNewValueToEndorsementEl(currentReview)
         }
     } else {
-            endorsementEl.innerHTML = ""
+            clearEndorsementEl()
         }
 })
 
@@ -46,17 +72,65 @@ function clearEndorsementEl() {
     endorsementEl.innerHTML = ""
 }
 
-function clearInputFieldEl() {
-    inputFieldEl.value = ""
-}
+function appendNewValueToEndorsementEl(review) {
+    let reviewID = review[0];
+    let reviewData = review[1];
+    let reviewText = reviewData[0];
+    let reviewFrom = reviewData[1];
+    let reviewTo = reviewData[2];
+    let reviewLikes = reviewData[3];
 
-function appendNewValueToEndorsementEl(endorsement) {
-    let endorsementID = endorsement[0]
-    let endorsementValue = endorsement[1]
+    let newEl = document.createElement("li");
+    let mainEl = document.createElement("div");
+    let toEl = document.createElement("h3");
+    let reviewEl = document.createElement("p");
+    let flexEl = document.createElement("div");
+    let fromEl = document.createElement("h3");
+    let likesEl = document.createElement("button");
 
-    let newValue = document.createElement("li")
+    toEl.textContent = `To ${reviewTo}`;
+    reviewEl.textContent = reviewText;
+    fromEl.textContent = `From ${reviewFrom}`;
+    likesEl.textContent = `💙 ${reviewLikes}`;
 
-    newValue.textContent = endorsementValue 
+    newEl.appendChild(mainEl);
+    mainEl.appendChild(toEl);
+    mainEl.appendChild(reviewEl);
+    mainEl.appendChild(flexEl);
+    flexEl.appendChild(fromEl);
+    flexEl.appendChild(likesEl);
 
-    endorsementEl.append(newValue)
+    reviewEl.classList = "review-text";
+    flexEl.classList = "flex-container";
+    likesEl.classList = "like-btn";
+
+    // Generate a unique identifier for the like button
+    const likeButtonID = `likeButton_${reviewID}`;
+    likesEl.id = likeButtonID;
+
+    // Check if the user has already liked this review
+    const hasLiked = localStorage.getItem(likeButtonID);
+
+    if (hasLiked === 'true') {
+        // If the user has already liked the review, disable the like button
+        likesEl.disabled = true;
+    } else {
+        // If the user hasn't liked the review, add a click event listener
+        likesEl.addEventListener("click", function () {
+            reviewLikes += 1;
+            let exactLocationInDB = ref(database, `endorsements/${reviewID}`);
+            update(exactLocationInDB, {
+                3: reviewLikes,
+            });
+
+            // Update the button text and style
+            likesEl.textContent = `💙 ${reviewLikes}`;
+            likesEl.disabled = true;
+
+            // Store that the user has liked this review in localStorage
+            localStorage.setItem(likeButtonID, 'true');
+        });
+    }
+
+    endorsementEl.append(newEl);
 }

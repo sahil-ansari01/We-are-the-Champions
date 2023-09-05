@@ -82,6 +82,7 @@ button {
 
 button:hover {
     cursor: pointer;
+    background: #1c7dec
 }
 
 h2 {
@@ -104,7 +105,7 @@ ul li {
     color: #1B1924;
     margin: 20px 0;
     padding: 20px;
-    border-radius: 10px;
+    border-radius: 12px;
 }
 
 .social {
@@ -119,4 +120,27 @@ ul li {
     font-size: 30px;
     padding: 30px;
     color: #28A9F1;
+}
+
+.like-btn {
+    background: none;
+    padding: 0;
+    width: 30%;
+    text-align: right;
+}
+
+.like-btn:hover {
+    background: none;
+    cursor: pointer;
+}
+ 
+h3 {
+    margin-top: 0; 
+}
+
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 11px;
 }
