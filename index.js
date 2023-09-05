@@ -1,33 +1,41 @@
+// Import Firebase Modules
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js"
 import { getDatabase, ref, push, onValue, update } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js"
 
+// Firebase configuration
 const appSettings = {
     databaseURL: "https://we-are-the-champions-db-c108c-default-rtdb.asia-southeast1.firebasedatabase.app/"
 }
 
+// Initialize Firebase
 const app = initializeApp(appSettings)
 const database = getDatabase(app)
+
+// Reference to the "endorsements" node in the Firebase Realtime Database
 const endorsementInDB = ref(database, "endorsements")
 
+// Get DOM elements
 const inputFieldEl = document.getElementById("input-field")
 const fromEl = document.getElementById("from-el")
 const toEl = document.getElementById("to-el")
 const publishButtonEl = document.getElementById("publish-button")
 const endorsementEl = document.getElementById("endorsement-el")
 
-
+// Add a click event listener to the "Publish" button
 publishButtonEl.addEventListener("click", function() {
     let reviewText = inputFieldEl.value
     let fromData = fromEl.value
     let toData = toEl.value
 
     if (reviewText && fromData && toData) {
+        // Clear input fields and push data to the Firebase database
         clearInputFieldEl()
         pushData(reviewText, fromData, toData);
         inputFieldEl.style.border = "none"
         fromEl.style.border = "none"
         toEl.style.border = "none"
     } else {
+        // If any input field is empty, display an error by adding a red border
         clearInputFieldEl()
         inputFieldEl.style.border = "2px solid red"
         fromEl.style.border = "2px solid red"
@@ -36,17 +44,20 @@ publishButtonEl.addEventListener("click", function() {
 
 })
 
+// Function to clear input fields
 function clearInputFieldEl() {
     inputFieldEl.value = ""
     fromEl.value = ""
     toEl.value = ""
 }
 
+// Function to push data to the Firebase database
 function pushData(review, from, to) {
     let arr = [review, from, to, 0];
     push(endorsementInDB, arr)
 }
 
+// Listen for changes in the "endorsements" node in the Firebase database
 onValue(endorsementInDB, function(snapshot) {
     clearEndorsementEl()
 
@@ -71,6 +82,8 @@ onValue(endorsementInDB, function(snapshot) {
 function clearEndorsementEl() {
     endorsementEl.innerHTML = ""
 }
+
+// Function to append a new review to the "endorsement" element in the DOM
 function appendNewValueToEndorsementEl(review) {
     let reviewID = review[0];
     let reviewData = review[1];
