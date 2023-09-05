@@ -43,7 +43,7 @@ function clearInputFieldEl() {
 }
 
 function pushData(review, from, to) {
-    let arr = [review, from, to, 1];
+    let arr = [review, from, to, 0];
     push(endorsementInDB, arr)
 }
 
